@@ -3,8 +3,8 @@ import "./Weather.css";
 import axios from "axios";
 
 export default function Weather(props) {
-  const [ready, setReady] = useState(false);
   const [weatherData, setWeatherData] = useState({ ready: false });
+  const [city, setCity] = useState(props.defaultCity);
 
   function handleResponse(response) {
     console.log(response.data);
@@ -20,6 +20,12 @@ export default function Weather(props) {
     });
   }
 
+  function Search() {
+    const apiKey = "754f68c53ca68b26fdebc81ec91936ca";
+
+    let apiUrl = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    axios.get(apiUrl).then(handleResponse);
+  }
   if (weatherData.ready) {
     return (
       <div className="Weather">
@@ -71,11 +77,7 @@ export default function Weather(props) {
       </div>
     );
   } else {
-    const apiKey = "754f68c53ca68b26fdebc81ec91936ca";
-
-    let apiUrl = `http://api.openweathermap.org/data/2.5/weather?q=${props.defaultCity}&appid=${apiKey}&units=metric`;
-    axios.get(apiUrl).then(handleResponse);
-
+    Search();
     return "Loading..";
   }
 }
